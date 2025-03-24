@@ -21,6 +21,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/repository"
+	"github.com/cloudnative-pg/cloudnative-pg/internal/configuration"
 	"os"
 	"path/filepath"
 
@@ -206,8 +208,14 @@ func runSubCommand(ctx context.Context, instance *postgres.Instance) error {
 	postgresStartConditions := concurrency.MultipleExecuted{}
 	exitedConditions := concurrency.MultipleExecuted{}
 
+	pluginRepository := repository.New()
+	if _, err := pluginRepository.RegisterUnixSocketPluginsInPath(configuration.Current.PluginSocketDir); err != nil {
+		contextLogger.Error(err, "Unable to load sidecar CNPG-i plugins, skipping")
+	}
+	defer pluginRepository.Close()
+
 	metricsExporter := metricserver.NewExporter(instance)
-	reconciler := controller.NewInstanceReconciler(instance, mgr.GetClient(), metricsExporter)
+	reconciler := controller.NewInstanceReconciler(instance, mgr.GetClient(), metricsExporter, pluginRepository)
 	err = ctrl.NewControllerManagedBy(mgr).
 		For(&apiv1.Cluster{}).
 		Named("instance-cluster").

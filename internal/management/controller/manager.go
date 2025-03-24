@@ -21,6 +21,7 @@ package controller
 import (
 	"context"
 	"fmt"
+	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/repository"
 
 	"go.uber.org/atomic"
 	corev1 "k8s.io/api/core/v1"
@@ -46,6 +47,7 @@ type InstanceReconciler struct {
 	systemInitialization  *concurrency.Executed
 	firstReconcileDone    atomic.Bool
 	metricsServerExporter *metricserver.Exporter
+	pluginRepository      repository.Interface
 }
 
 // NewInstanceReconciler creates a new instance reconciler
@@ -53,6 +55,7 @@ func NewInstanceReconciler(
 	instance *postgres.Instance,
 	client ctrl.Client,
 	metricsExporter *metricserver.Exporter,
+	pluginRepository repository.Interface,
 ) *InstanceReconciler {
 	return &InstanceReconciler{
 		instance:              instance,
@@ -61,6 +64,7 @@ func NewInstanceReconciler(
 		extensionStatus:       make(map[string]bool),
 		systemInitialization:  concurrency.NewExecuted(),
 		metricsServerExporter: metricsExporter,
+		pluginRepository:      pluginRepository,
 	}
 }
 

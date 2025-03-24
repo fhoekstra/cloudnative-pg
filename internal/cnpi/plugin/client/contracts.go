@@ -58,6 +58,8 @@ type Connection interface {
 
 	// MetadataList exposes the metadata of the loaded plugins
 	MetadataList() []connection.Metadata
+
+	HasPlugin(pluginName string) bool
 }
 
 // ClusterCapabilities describes a set of behaviour needed to implement the Cluster capabilities

@@ -22,7 +22,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	cnpgiclient "github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client"
 	"math"
 	"path"
 	"path/filepath"
@@ -43,6 +42,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
 	apiv1 "github.com/cloudnative-pg/cloudnative-pg/api/v1"
+	cnpgiclient "github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client"
 	"github.com/cloudnative-pg/cloudnative-pg/internal/controller"
 	"github.com/cloudnative-pg/cloudnative-pg/internal/management/controller/roles"
 	"github.com/cloudnative-pg/cloudnative-pg/internal/management/controller/slots/reconciler"
@@ -111,10 +111,29 @@ func (r *InstanceReconciler) Reconcile(
 		return reconcile.Result{}, fmt.Errorf("could not fetch Cluster: %w", err)
 	}
 
-	// Print the Cluster
-	contextLogger.Debug("Reconciling Cluster", "cluster", cluster)
-	ctx = cluster.SetInContext(ctx)
+	contextLogger.Debug("Reconciling Cluster")
+
+	pluginLoadingContext, cancelPluginLoading := context.WithTimeout(ctx, 5*time.Second)
+	defer cancelPluginLoading()
+
+	// Load the plugins required to bootstrap and reconcile this cluster
+	enabledPluginNames := apiv1.GetPluginConfigurationEnabledPluginNames(cluster.Spec.Plugins)
+	enabledPluginNames = append(
+		enabledPluginNames,
+		apiv1.GetExternalClustersEnabledPluginNames(cluster.Spec.ExternalClusters)...,
+	)
+
+	pluginClient, err := cnpgiclient.WithPlugins(pluginLoadingContext, r.pluginRepository, enabledPluginNames...)
+	if err != nil {
+		contextLogger.Error(err, "Error loading plugins, retrying")
+		return ctrl.Result{}, err
+	}
+	defer func() {
+		pluginClient.Close(ctx)
+	}()
+
 	ctx = cnpgiclient.SetPluginClientInContext(ctx, pluginClient)
+	ctx = cluster.SetInContext(ctx)
 
 	// Reconcile PostgreSQL instance parameters
 	r.reconcileInstance(cluster)

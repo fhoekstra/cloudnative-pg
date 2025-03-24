@@ -52,6 +52,14 @@ func (data *data) MetadataList() []connection.Metadata {
 	return result
 }
 
+func (data *data) HasPlugin(pluginName string) bool {
+	_, err := data.getPlugin(pluginName)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func (data *data) Close(ctx context.Context) {
 	contextLogger := log.FromContext(ctx)
 	for i := range data.plugins {
