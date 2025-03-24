@@ -22,6 +22,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	context2 "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
 	"math"
 	"os"
 	"os/exec"
@@ -1063,7 +1064,7 @@ func restoreViaPlugin(
 	contextLogger := log.FromContext(ctx)
 
 	// TODO: timeout should be configurable by the user
-	ctx = context.WithValue(ctx, utils.GRPCTimeoutKey, 100*time.Minute)
+	ctx = context.WithValue(ctx, context2.GRPCTimeoutKey, 100*time.Minute)
 
 	plugins := repository.New()
 	availablePluginNames, err := plugins.RegisterUnixSocketPluginsInPath(configuration.Current.PluginSocketDir)

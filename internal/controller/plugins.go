@@ -27,7 +27,6 @@ import (
 
 	apiv1 "github.com/cloudnative-pg/cloudnative-pg/api/v1"
 	cnpgiClient "github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client"
-	"github.com/cloudnative-pg/cloudnative-pg/pkg/utils"
 )
 
 // preReconcilePluginHooks ensures we call the pre-reconcile plugin hooks
@@ -36,7 +35,7 @@ func preReconcilePluginHooks(
 	cluster *apiv1.Cluster,
 	object client.Object,
 ) cnpgiClient.ReconcilerHookResult {
-	pluginClient := getPluginClientFromContext(ctx)
+	pluginClient := cnpgiClient.GetPluginClientFromContext(ctx)
 	return pluginClient.PreReconcile(ctx, cluster, object)
 }
 
@@ -46,7 +45,7 @@ func postReconcilePluginHooks(
 	cluster *apiv1.Cluster,
 	object client.Object,
 ) cnpgiClient.ReconcilerHookResult {
-	pluginClient := getPluginClientFromContext(ctx)
+	pluginClient := cnpgiClient.GetPluginClientFromContext(ctx)
 	return pluginClient.PostReconcile(ctx, cluster, object)
 }
 
@@ -82,14 +81,4 @@ func setStatusPluginHook(
 	)
 
 	return ctrl.Result{RequeueAfter: 5 * time.Second}, cli.Status().Patch(ctx, cluster, client.MergeFrom(origCluster))
-}
-
-// setPluginClientInContext records the plugin client in the given context
-func setPluginClientInContext(ctx context.Context, client cnpgiClient.Client) context.Context {
-	return context.WithValue(ctx, utils.PluginClientKey, client)
-}
-
-// getPluginClientFromContext gets the current plugin client from the context
-func getPluginClientFromContext(ctx context.Context) cnpgiClient.Client {
-	return ctx.Value(utils.PluginClientKey).(cnpgiClient.Client)
 }

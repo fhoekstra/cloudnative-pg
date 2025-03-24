@@ -286,7 +286,7 @@ func archiveWALViaPlugins(
 	if enabledArchiverPluginName != "" && !availableAndEnabled.Has(enabledArchiverPluginName) {
 		return fmt.Errorf("wal archive plugin is not available: %s", enabledArchiverPluginName)
 	}
-
+	pluginClient.NewClient(ctx, enabledPluginNamesSet)
 	client, err := pluginClient.WithPlugins(
 		ctx,
 		plugins,

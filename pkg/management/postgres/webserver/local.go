@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	context2 "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
 	"net/http"
 	"strings"
 	"time"
@@ -36,7 +37,6 @@ import (
 	"github.com/cloudnative-pg/cloudnative-pg/pkg/management/postgres"
 	"github.com/cloudnative-pg/cloudnative-pg/pkg/management/url"
 	"github.com/cloudnative-pg/cloudnative-pg/pkg/resources/status"
-	"github.com/cloudnative-pg/cloudnative-pg/pkg/utils"
 )
 
 type localWebserverEndpoints struct {
@@ -236,7 +236,7 @@ func (ws *localWebserverEndpoints) startPluginBackup(
 	backup *apiv1.Backup,
 ) {
 	// TODO: timeout should be configurable by the user
-	ctx = context.WithValue(ctx, utils.GRPCTimeoutKey, 100*time.Minute)
+	ctx = context.WithValue(ctx, context2.GRPCTimeoutKey, 100*time.Minute)
 	NewPluginBackupCommand(cluster, backup, ws.typedClient, ws.eventRecorder).Start(ctx)
 }
 

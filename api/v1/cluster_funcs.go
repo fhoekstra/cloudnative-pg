@@ -19,6 +19,7 @@ package v1
 import (
 	"context"
 	"fmt"
+	context2 "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
 	"regexp"
 	"slices"
 	"strconv"
@@ -388,7 +389,7 @@ func (secretResourceVersion *SecretsResourceVersion) SetExternalClusterSecretVer
 
 // SetInContext records the cluster in the given context
 func (cluster *Cluster) SetInContext(ctx context.Context) context.Context {
-	return context.WithValue(ctx, utils.ContextKeyCluster, cluster)
+	return context.WithValue(ctx, context2.ContextKeyCluster, cluster)
 }
 
 // GetImageName get the name of the image that should be used

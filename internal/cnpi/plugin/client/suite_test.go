@@ -18,6 +18,7 @@ package client
 
 import (
 	"context"
+	k8client "sigs.k8s.io/controller-runtime/pkg/client"
 	"testing"
 
 	"github.com/cloudnative-pg/cnpg-i/pkg/backup"
@@ -193,4 +194,8 @@ func (f *fakeConnection) Ping(_ context.Context) error {
 
 func (f *fakeConnection) Close() error {
 	panic("not implemented") // TODO: Implement
+}
+
+type fakeCluster struct {
+	k8client.Object
 }

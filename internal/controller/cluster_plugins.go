@@ -19,6 +19,7 @@ package controller
 
 import (
 	"context"
+	cnpgiclient "github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client"
 	"reflect"
 
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -30,7 +31,7 @@ import (
 // this cluster
 func (r *ClusterReconciler) updatePluginsStatus(ctx context.Context, cluster *apiv1.Cluster) error {
 	// Load the plugins
-	pluginClient := getPluginClientFromContext(ctx)
+	pluginClient := cnpgiclient.GetPluginClientFromContext(ctx)
 
 	// Get the status of the plugins and store it inside the status section
 	oldCluster := cluster.DeepCopy()

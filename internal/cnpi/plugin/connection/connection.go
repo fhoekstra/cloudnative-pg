@@ -298,6 +298,7 @@ func (pluginData *data) Metadata() Metadata {
 		WALCapabilities:            make([]string, len(pluginData.walCapabilities)),
 		BackupCapabilities:         make([]string, len(pluginData.backupCapabilities)),
 		RestoreJobHookCapabilities: make([]string, len(pluginData.restoreJobHooksCapabilities)),
+		PostgresCapabilities:       make([]string, len(pluginData.postgresCapabilities)),
 	}
 
 	for i := range pluginData.capabilities {

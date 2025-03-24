@@ -18,15 +18,14 @@ package client
 
 import (
 	"context"
+	contextutils "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
 
 	restore "github.com/cloudnative-pg/cnpg-i/pkg/restore/job"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	apiv1 "github.com/cloudnative-pg/cloudnative-pg/api/v1"
 	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin"
-	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client/contracts"
 	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/connection"
 )
 
@@ -39,7 +38,17 @@ type Client interface {
 	WalCapabilities
 	BackupCapabilities
 	RestoreJobHooksCapabilities
-	contracts.PostgresConfigurationCapabilities
+	PostgresConfigurationCapabilities
+}
+
+// SetPluginClientInContext records the plugin client in the given context
+func SetPluginClientInContext(ctx context.Context, client Client) context.Context {
+	return context.WithValue(ctx, contextutils.PluginClientKey, client)
+}
+
+// GetPluginClientFromContext gets the current plugin client from the context
+func GetPluginClientFromContext(ctx context.Context) Client {
+	return ctx.Value(contextutils.PluginClientKey).(Client)
 }
 
 // Connection describes a set of behaviour needed to properly handle the plugin connections
@@ -153,5 +162,5 @@ type BackupCapabilities interface {
 
 // RestoreJobHooksCapabilities describes a set of behaviour needed to run the Restore
 type RestoreJobHooksCapabilities interface {
-	Restore(ctx context.Context, cluster *apiv1.Cluster) (*restore.RestoreResponse, error)
+	Restore(ctx context.Context, cluster gvkEnsurer) (*restore.RestoreResponse, error)
 }

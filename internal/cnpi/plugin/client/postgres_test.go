@@ -20,12 +20,9 @@ import (
 	"context"
 	"errors"
 
+	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/connection"
 	"github.com/cloudnative-pg/cnpg-i/pkg/postgres"
 	"google.golang.org/grpc"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	apiv1 "github.com/cloudnative-pg/cloudnative-pg/api/v1"
-	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/connection"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -84,14 +81,14 @@ func (f *fakePostgresConnection) PostgresCapabilities() []postgres.PostgresCapab
 var _ = Describe("EnrichConfiguration", func() {
 	var (
 		d       *data
-		cluster *apiv1.Cluster
+		cluster *fakeCluster
 		config  map[string]string
 	)
 
 	BeforeEach(func() {
 		d = &data{plugins: []connection.Interface{}}
 
-		cluster = &apiv1.Cluster{ObjectMeta: metav1.ObjectMeta{Name: "test", Namespace: "test-namespace"}}
+		cluster = &fakeCluster{}
 		config = map[string]string{"key1": "value1"}
 	})
 

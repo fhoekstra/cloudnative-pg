@@ -18,6 +18,7 @@ package operatorclient
 
 import (
 	"context"
+	context2 "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
 	"reflect"
 
 	"github.com/cloudnative-pg/machinery/pkg/log"
@@ -26,7 +27,6 @@ import (
 
 	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin"
 	cnpgiClient "github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client"
-	"github.com/cloudnative-pg/cloudnative-pg/pkg/utils"
 )
 
 type extendedClient struct {
@@ -47,13 +47,13 @@ func (e *extendedClient) invokePlugin(
 ) (client.Object, error) {
 	contextLogger := log.FromContext(ctx).WithName("invokePlugin")
 
-	cluster, ok := ctx.Value(utils.ContextKeyCluster).(client.Object)
+	cluster, ok := ctx.Value(context2.ContextKeyCluster).(client.Object)
 	if !ok || cluster == nil {
 		contextLogger.Trace("skipping invokePlugin, cannot find the cluster inside the context")
 		return obj, nil
 	}
 
-	pluginClient, ok := ctx.Value(utils.PluginClientKey).(cnpgiClient.Client)
+	pluginClient, ok := ctx.Value(context2.PluginClientKey).(cnpgiClient.Client)
 	if !ok || pluginClient == nil {
 		contextLogger.Trace("skipping invokePlugin, cannot find the plugin client inside the context")
 		return obj, nil

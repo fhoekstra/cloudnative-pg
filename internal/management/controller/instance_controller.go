@@ -22,6 +22,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	cnpgiclient "github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client"
 	"math"
 	"path"
 	"path/filepath"
@@ -112,6 +113,8 @@ func (r *InstanceReconciler) Reconcile(
 
 	// Print the Cluster
 	contextLogger.Debug("Reconciling Cluster", "cluster", cluster)
+	ctx = cluster.SetInContext(ctx)
+	ctx = cnpgiclient.SetPluginClientInContext(ctx, pluginClient)
 
 	// Reconcile PostgreSQL instance parameters
 	r.reconcileInstance(cluster)
