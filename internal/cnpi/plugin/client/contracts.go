@@ -18,7 +18,6 @@ package client
 
 import (
 	"context"
-	contextutils "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
 
 	restore "github.com/cloudnative-pg/cnpg-i/pkg/restore/job"
 	"k8s.io/apimachinery/pkg/util/validation/field"
@@ -27,6 +26,7 @@ import (
 
 	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin"
 	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/connection"
+	contextutils "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
 )
 
 // Client describes a set of behaviour needed to properly handle all the plugin client expected features

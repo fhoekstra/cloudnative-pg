@@ -20,10 +20,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"sigs.k8s.io/controller-runtime/pkg/client"
 	"slices"
 
 	restore "github.com/cloudnative-pg/cnpg-i/pkg/restore/job"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 // ErrNoPluginSupportsRestoreJobHooksCapability is raised when no plugin supports the restore job hooks capability

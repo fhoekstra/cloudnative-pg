@@ -261,7 +261,6 @@ func restoreWALViaPlugins(
 	)
 	enabledPluginNamesSet := stringset.From(enabledPluginNames)
 	client, err := pluginClient.NewClient(ctx, enabledPluginNamesSet)
-
 	if err != nil {
 		contextLogger.Error(err, "Error while loading required plugins")
 		return false, err

@@ -21,7 +21,6 @@ package controller
 import (
 	"context"
 	"fmt"
-	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/repository"
 
 	"go.uber.org/atomic"
 	corev1 "k8s.io/api/core/v1"
@@ -29,6 +28,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime/pkg/client"
 
 	apiv1 "github.com/cloudnative-pg/cloudnative-pg/api/v1"
+	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/repository"
 	"github.com/cloudnative-pg/cloudnative-pg/pkg/concurrency"
 	"github.com/cloudnative-pg/cloudnative-pg/pkg/management/postgres"
 	"github.com/cloudnative-pg/cloudnative-pg/pkg/management/postgres/webserver/metricserver"

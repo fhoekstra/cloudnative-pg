@@ -18,13 +18,13 @@ package plugin
 
 import (
 	"context"
-	cnpgiClient "github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client"
-	contextutils "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
 
 	"github.com/cloudnative-pg/machinery/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	cnpgiClient "github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client"
 	"github.com/cloudnative-pg/cloudnative-pg/pkg/postgres"
+	contextutils "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
 )
 
 // CreatePostgresqlConfigurationWithPlugins creates a new PostgreSQL configuration and enriches it by invoking

@@ -54,10 +54,7 @@ func (data *data) MetadataList() []connection.Metadata {
 
 func (data *data) HasPlugin(pluginName string) bool {
 	_, err := data.getPlugin(pluginName)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func (data *data) Close(ctx context.Context) {

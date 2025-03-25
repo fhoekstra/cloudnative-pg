@@ -851,10 +851,11 @@ var _ = Describe("checkPodSpec with plugins", Ordered, func() {
 
 		podModifiedByPlugins.Spec.Containers[0].Image = "postgres:19.0"
 
-		pluginClient := fakePluginClientRollout{
+		pluginCli := fakePluginClientRollout{
 			returnedPod: podModifiedByPlugins,
 		}
-		ctx := context.WithValue(context.TODO(), utils.PluginClientKey, pluginClient)
+
+		ctx := pluginClient.SetPluginClientInContext(context.TODO(), pluginCli)
 
 		rollout, err := checkPodSpecIsOutdated(ctx, pod, &cluster)
 		Expect(err).ToNot(HaveOccurred())
@@ -876,10 +877,10 @@ var _ = Describe("checkPodSpec with plugins", Ordered, func() {
 			},
 		}
 
-		pluginClient := fakePluginClientRollout{
+		pluginCli := fakePluginClientRollout{
 			returnedPod: podModifiedByPlugins,
 		}
-		ctx := context.WithValue(context.TODO(), utils.PluginClientKey, pluginClient)
+		ctx := pluginClient.SetPluginClientInContext(context.TODO(), pluginCli)
 
 		rollout, err := checkPodSpecIsOutdated(ctx, pod, &cluster)
 		Expect(err).ToNot(HaveOccurred())
@@ -900,10 +901,10 @@ var _ = Describe("checkPodSpec with plugins", Ordered, func() {
 				Value: "new_value",
 			})
 
-		pluginClient := fakePluginClientRollout{
+		pluginCli := fakePluginClientRollout{
 			returnedPod: podModifiedByPlugins,
 		}
-		ctx := context.WithValue(context.TODO(), utils.PluginClientKey, pluginClient)
+		ctx := pluginClient.SetPluginClientInContext(context.TODO(), pluginCli)
 
 		rollout, err := checkPodSpecIsOutdated(ctx, pod, &cluster)
 		Expect(err).ToNot(HaveOccurred())

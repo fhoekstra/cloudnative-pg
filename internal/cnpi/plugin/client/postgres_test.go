@@ -20,9 +20,10 @@ import (
 	"context"
 	"errors"
 
-	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/connection"
 	"github.com/cloudnative-pg/cnpg-i/pkg/postgres"
 	"google.golang.org/grpc"
+
+	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/connection"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

@@ -18,7 +18,6 @@ package client
 
 import (
 	"context"
-	k8client "sigs.k8s.io/controller-runtime/pkg/client"
 	"testing"
 
 	"github.com/cloudnative-pg/cnpg-i/pkg/backup"
@@ -30,6 +29,7 @@ import (
 	restore "github.com/cloudnative-pg/cnpg-i/pkg/restore/job"
 	"github.com/cloudnative-pg/cnpg-i/pkg/wal"
 	"google.golang.org/grpc"
+	k8client "sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/connection"
 

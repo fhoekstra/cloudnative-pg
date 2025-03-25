@@ -3,12 +3,14 @@ package client
 import (
 	"context"
 
-	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/repository"
-	"github.com/cloudnative-pg/cloudnative-pg/internal/configuration"
 	"github.com/cloudnative-pg/machinery/pkg/log"
 	"github.com/cloudnative-pg/machinery/pkg/stringset"
+
+	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/repository"
+	"github.com/cloudnative-pg/cloudnative-pg/internal/configuration"
 )
 
+// NewClient creates a new CNPI client
 func NewClient(ctx context.Context, enabledPlugin *stringset.Data) (Client, error) {
 	contextLogger := log.FromContext(ctx)
 	plugins := repository.New()

@@ -19,6 +19,7 @@ package client
 import (
 	"encoding/json"
 	"errors"
+
 	"github.com/cloudnative-pg/cnpg-i/pkg/operator"
 
 	"github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/connection"
