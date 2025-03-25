@@ -18,8 +18,8 @@ package plugin
 
 import (
 	"context"
-	client2 "github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client"
-	context2 "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
+	cnpgiClient "github.com/cloudnative-pg/cloudnative-pg/internal/cnpi/plugin/client"
+	contextutils "github.com/cloudnative-pg/cloudnative-pg/pkg/utils/context"
 
 	"github.com/cloudnative-pg/machinery/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -37,14 +37,14 @@ func CreatePostgresqlConfigurationWithPlugins(
 
 	config := postgres.CreatePostgresqlConfiguration(info)
 
-	cluster, ok := ctx.Value(context2.ContextKeyCluster).(client.Object)
+	cluster, ok := ctx.Value(contextutils.ContextKeyCluster).(client.Object)
 	if !ok || cluster == nil {
 		contextLogger.Info("skipping CreatePostgresqlConfigurationWithPlugins, cannot find the cluster inside the context")
 		return config, nil
 	}
 
-	pluginClient, ok := ctx.Value(context2.PluginClientKey).(client2.Client)
-	if !ok || pluginClient == nil {
+	pluginClient := cnpgiClient.GetPluginClientFromContext(ctx)
+	if pluginClient == nil {
 		contextLogger.Info(
 			"skipping CreatePostgresqlConfigurationWithPlugins, cannot find the plugin client inside the context")
 		return config, nil
